@@ -30,8 +30,7 @@ function updateSigninStatus(isSignedIn) {
 // STORAGE INIT
 
 let googleSheetsConfig = {
-    CLIENT_ID: "62033563399-aiq4cnt2o78desod4o69jkmgmcb5mi2a.apps.googleusercontent.com",
-    CLIENT_SECRET: "BTEngpESBOWFtZ6fpSrh6Fol",
+    CLIENT_ID: "62033563399-g7v42rmhn4q63mdqh1mn0pppqmm0hu73.apps.googleusercontent.com",
     DISCOVERY_DOCS: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
     SCOPES: "https://www.googleapis.com/auth/spreadsheets.readonly",
     DOC_ID: '1XfD84T20nHz1J7RPh0p-wT5bB_U19WkocyOiN8s8duQ'
