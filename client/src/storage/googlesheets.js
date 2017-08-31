@@ -1,5 +1,19 @@
 import gapi from '../vendor/gapi';
 
+import { getPeriodLength } from '../utils';
+
+
+let str = x => x;
+let parseDateTime = dt => new Date(dt);
+
+var googleSheetSchema = [
+    ["id", str],
+    ["start", parseDateTime],
+    ["end", parseDateTime],
+    ["description", str],
+    ["category", str]
+];
+
 
 export function createGoogleSheetStorage({ CLIENT_ID, DISCOVERY_DOCS, SCOPES, DOC_ID, SHEET_NAME }) {
 
@@ -30,6 +44,7 @@ export function createGoogleSheetStorage({ CLIENT_ID, DISCOVERY_DOCS, SCOPES, DO
         },
 
         signIn() {
+            console.log("Signing in to google sheets");
             if (gapiLoaded) {
                 gapi.auth2.getAuthInstance().signIn();
             }
@@ -49,24 +64,20 @@ export function createGoogleSheetStorage({ CLIENT_ID, DISCOVERY_DOCS, SCOPES, DO
             return gapiLoaded;
         },
 
-        getData() {
-            let colHeaders = ["date", "description", "start", "end", "length", "category"];
+        getTimeLogs() {
             return gapi.client.sheets.spreadsheets.values.get({
                 spreadsheetId: DOC_ID,
-                range: 'Aug. 17!A2:F17',
+                range: 'tttime!A:E',
             }).then(function (response) {
-                var range = response.result;
-                var results = [];
-                if (range.values.length > 0) {
-                    for (var i = 0; i < range.values.length; i++) {
-                        var row = range.values[i];
-                        var rowObj = {};
-                        results.push(rowObj);
-                        colHeaders.forEach((header, i) => {
-                            rowObj[header] = row[i];
-                        });
-                    }
-                }
+                let rows = response.result.values;
+                return rows.map(row => {
+                    let rowObj = {};
+                    googleSheetSchema.forEach(([name, parse], i) => {
+                        rowObj[name] = parse(row[i]);
+                    });
+                    rowObj.periodLength = getPeriodLength(rowObj.end.getTime() - rowObj.start.getTime());
+                    return rowObj;
+                });
                 return results;
             }, function (response) {
                 console.log("Got error when reading sheet");

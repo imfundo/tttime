@@ -1,0 +1,17 @@
+{
+    "presets": [
+        [
+            "env",
+            {
+                "targets": {
+                    "browsers": ["last 2 versions", "ie >= 11"]
+                }
+            }
+        ]
+    ],
+    "plugins": [
+        "syntax-jsx",
+        "transform-react-jsx",
+        "transform-class-properties"
+    ]
+}
