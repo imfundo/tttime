@@ -2,7 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
-    entry: ["./src/index.js"],
+    entry: ["./src/index.prod.js"],
     // devtool: "inline-source-map",
     module: {
         rules: [
@@ -13,18 +13,14 @@ module.exports = {
             }
         ],
     },
-    devServer: {
-        contentBase: "./dist",
-        historyApiFallback: true
-    },
-    /*     plugins: [
-            new webpack.optimize.UglifyJsPlugin({
-                compress: {
-                    warnings: false,
-                    drop_console: false
-                }
-            })
-        ], */
+    plugins: [
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false,
+                drop_console: false
+            }
+        })
+    ],
     output: {
         filename: "bundle.js",
         path: path.resolve(__dirname, "dist")

@@ -1,15 +1,19 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
 
 export default function TimelogList({ timelogs }) {
     return (
         <div className="timelogs">
-            <h1>Home</h1>
             {timelogs.map(timelog => (
-                <p>{timelog.id}</p>
+                <div key={timelog.id} className="timelog">
+                    <div className="timelog-duration">{timelog.duration}</div>
+                    <div className="timelog-row">
+                        <div className="timelog-date">{timelog.date}</div>
+                        <div className="timelog-description">{timelog.description}</div>
+                        <div className="timelog-period">{timelog.startTime} - {timelog.endTime}</div>
+                    </div>
+                </div>
             ))}
-            <Link to="/new">Create new log</Link>
         </div>
     )
 }

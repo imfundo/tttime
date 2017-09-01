@@ -1,6 +1,5 @@
 import gapi from '../vendor/gapi';
 
-import { getPeriodLength } from '../utils';
 
 
 let str = x => x;
@@ -75,7 +74,6 @@ export function createGoogleSheetStorage({ CLIENT_ID, DISCOVERY_DOCS, SCOPES, DO
                     googleSheetSchema.forEach(([name, parse], i) => {
                         rowObj[name] = parse(row[i]);
                     });
-                    rowObj.periodLength = getPeriodLength(rowObj.end.getTime() - rowObj.start.getTime());
                     return rowObj;
                 });
                 return results;

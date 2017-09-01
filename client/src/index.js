@@ -1,26 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
+import css from './index.css'
 
 import { createGoogleSheetStorage } from './storage/googlesheets.js';
-import gapi from './vendor/gapi';
 
 import App from './ui/App.js'
 
-window.gapi = gapi;
 
-// STORE INIT
-/* 
-let store = {
-    appStarted: false,
-    isSignedIn: false,
-    buttonText: "Loading",
-    dataLoading: false,
-    data: false
-}; */
-
-
-// STORAGE INIT
 
 let googleSheetsConfig = {
     CLIENT_ID: "62033563399-g7v42rmhn4q63mdqh1mn0pppqmm0hu73.apps.googleusercontent.com",
@@ -30,14 +17,16 @@ let googleSheetsConfig = {
 }
 
 
-let storage = createGoogleSheetStorage(googleSheetsConfig);
-
-
-ReactDOM.render(
-    <BrowserRouter>
-        <App
-            storage={storage}
-        />
-    </BrowserRouter>,
-    document.getElementById("root")
-)
+export default function initApp({ baseurl }) {
+    let storage = createGoogleSheetStorage(googleSheetsConfig);
+    
+    
+    ReactDOM.render(
+        <BrowserRouter basename={baseurl}>
+            <App
+                storage={storage}
+            />
+        </BrowserRouter>,
+        document.getElementById("root")
+    )
+}

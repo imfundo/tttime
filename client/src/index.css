@@ -1,0 +1,96 @@
+
+
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+.app {
+    max-width: 30rem;
+    margin: 0 auto;
+}
+
+.header {
+    height: 2rem;
+    background-color: #DF3651;
+}
+
+.logo {
+    font-weight: 700;
+    text-decoration: none;
+    color: white;
+    line-height: 1.6rem;
+    height: 1.6rem;
+    display: block;
+    padding: 0.2rem 0 0.2rem 0.4rem;
+}
+
+.timelogs {
+    margin-bottom: 1.8rem;
+}
+
+.timelog {
+    border: 1px solid #ccc;
+    padding: 1rem 1.5rem;
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.timelog-row {
+    display: flex;
+}
+
+.timelog-row:first-child {
+    margin-bottom: 0.3rem;
+}
+
+.timelog-duration {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #DF3651;
+    color: white;
+    padding: 0.12rem 0.25rem;
+    font-size: 0.75rem;
+    transform: rotate(90deg) translateX(100%) translateY(-100%);
+    transform-origin: top right;
+}
+
+.timelog-period,
+.timelog-duration {
+    text-align: right;
+}
+
+.timelog-period, 
+.timelog-description {
+    flex-grow: 1;
+}
+
+.timelog-date {
+    width: 6rem;
+}
+
+
+.create-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: #DF3651;
+    border-radius: 1.25rem;
+    display: block;
+    position: relative;
+}
+
+.create-btn::after {
+    content: '';
+    position: absolute;
+    top: -0.2rem;
+    left: -0.2rem;
+    display: block;
+    width: 2.9rem;
+    height: 2.9rem;
+    background-color: #F9D1D9;
+    border-radius: 1.45rem;
+    display: block;
+    z-index: -1;
+}

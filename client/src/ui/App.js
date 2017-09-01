@@ -3,10 +3,11 @@ import { withRouter } from 'react-router'
 import { Route, Link } from 'react-router-dom'
 
 import Login from './Login'
-import TimelogList from './TimelogList'
+import Home from './Home'
 import CreateTimelog from './CreateTimelog'
 import EditTimelog from './EditTimelog'
 import Loader from './Loader'
+import { toViewModel } from '../utils'
 
 
 
@@ -52,24 +53,30 @@ class App extends Component {
     }
 
     render() {
-        const { storageClientLoaded, userSignedIn, timelogs } = this.state;
+        let { storageClientLoaded, userSignedIn, timelogs } = this.state;
         const { storage } = this.props;
+
+        if (timelogs) {
+            timelogs = timelogs.map(toViewModel);
+        }
+
+        console.log(timelogs);
 
         return (
             <Loader isLoaded={storageClientLoaded}>
                 <div className="app">
                     <div className="header">
                         {(
-                            userSignedIn &&
+                            userSignedIn && false &&
                             <button onClick={storage.signOut}>Signout</button>
                         )}
-                        <Link to="/">Home</Link>
+                        <Link to="/" className="logo">TTT</Link>
                     </div>
                     <div className="main">
                         <Route exact path="/" render={({ history }) => {
                             return (
-                                <TimelogList
-                                    timelogs={timelogs || []}
+                                <Home
+                                    timelogs={timelogs}
                                 />
                             )
                         }} />
@@ -80,7 +87,6 @@ class App extends Component {
                                 />
                             )
                         }} />
-
                         <Route path="/new" render={() => (
                             <CreateTimelog />
                         )} />
@@ -94,6 +100,7 @@ class App extends Component {
     }
 
 }
+
 
 
 export default withRouter(App)
