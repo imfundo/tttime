@@ -16,7 +16,8 @@ class App extends Component {
     state = {
         storageClientLoaded: false,
         userSignedIn: false,
-        timelogs: null,
+        timelogs: [],
+        fetchingTimelogs: false
     }
 
     componentWillMount() {
@@ -28,9 +29,19 @@ class App extends Component {
         });
     }
 
-    fetchTimelogs() {
+    fetchTimelogs = () => {
+        this.setState({ fetchingTimelogs: true });
         this.props.storage.getTimeLogs().then(timelogs => {
-            this.setState({ timelogs });
+            this.setState({ timelogs, fetchingTimelogs: false });
+        })
+    }
+
+    handleCreateTimelog = (timelog) => {
+        const { storage } = this.props;
+
+        storage.saveTimeLog(timelog).then(() => {
+            this.fetchTimelogs();
+            this.props.history.push("/");
         })
     }
 
@@ -45,7 +56,7 @@ class App extends Component {
             history.push("/");
         }
 
-        if (userSignedIn && !this.state.timelogs) {
+        if (userSignedIn) {
             this.fetchTimelogs();
         }
 
@@ -53,14 +64,10 @@ class App extends Component {
     }
 
     render() {
-        let { storageClientLoaded, userSignedIn, timelogs } = this.state;
+        let { storageClientLoaded, userSignedIn, timelogs, fetchingTimelogs } = this.state;
         const { storage } = this.props;
 
-        if (timelogs) {
-            timelogs = timelogs.map(toViewModel);
-        }
-
-        console.log(timelogs);
+        timelogs = timelogs.map(toViewModel);
 
         return (
             <Loader isLoaded={storageClientLoaded}>
@@ -76,6 +83,7 @@ class App extends Component {
                         <Route exact path="/" render={({ history }) => {
                             return (
                                 <Home
+                                    fetchingTimelogs={fetchingTimelogs}
                                     timelogs={timelogs}
                                 />
                             )
@@ -88,7 +96,7 @@ class App extends Component {
                             )
                         }} />
                         <Route path="/new" render={() => (
-                            <CreateTimelog />
+                            <CreateTimelog onCreate={this.handleCreateTimelog} />
                         )} />
                         <Route path="/edit/:timelogId" render={() => (
                             <EditTimelog />

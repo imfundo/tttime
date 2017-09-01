@@ -32,7 +32,7 @@ body {
 
 .timelog {
     border: 1px solid #ccc;
-    padding: 1rem 1.5rem;
+    padding: 1rem 2.2rem 1rem 1.3rem;
     position: relative;
     margin-bottom: 1rem;
 }
@@ -49,16 +49,17 @@ body {
     position: absolute;
     top: 0;
     right: 0;
-    background-color: #DF3651;
+    background-color: #ccc;
     color: white;
     padding: 0.12rem 0.25rem;
     font-size: 0.75rem;
-    transform: rotate(90deg) translateX(100%) translateY(-100%);
+    transform: rotate(90deg) translateX(100%);
     transform-origin: top right;
+    width: 2.75rem;
+    text-align: center;
 }
 
-.timelog-period,
-.timelog-duration {
+.timelog-period {
     text-align: right;
 }
 

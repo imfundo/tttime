@@ -5,11 +5,11 @@ import Loader from './Loader'
 import { Link } from 'react-router-dom'
 
 
-export default function Home({ timelogs }) {
+export default function Home({ timelogs, fetchingTimelogs }) {
     return (
         <div className="home">
             <h1>Timelog</h1>
-            <Loader isLoaded={timelogs}>
+            <Loader isLoaded={!fetchingTimelogs}>
                 <TimelogList timelogs={timelogs} />
             </Loader>
             <Link to="/new" className="create-btn">

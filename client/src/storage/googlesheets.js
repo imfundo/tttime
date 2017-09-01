@@ -1,16 +1,49 @@
 import gapi from '../vendor/gapi';
 
 
+let zp = num => ("00" + num).slice(-2);
 
 let str = x => x;
-let parseDateTime = dt => new Date(dt);
+let parseDateTime = dt => {
+    const [date, time] = dt.split(" ");
+    const [year, month, day] = date.split("-").map(x => parseInt(x, 10));
+    const [hour, minute] = time.split(":").slice(0, 2).map(x => parseInt(x, 10));
+
+    return new Date(year, month - 1, day, hour, minute);
+};
+
+let dateTimeToString = dt => {
+    let date = `${dt.getFullYear()}-${zp(dt.getMonth() + 1)}-${zp(dt.getDate())}`;
+    let time = `${zp(dt.getHours())}:${zp(dt.getMinutes())}`
+    return `${date} ${time}`;
+}
 
 var googleSheetSchema = [
-    ["id", str],
-    ["start", parseDateTime],
-    ["end", parseDateTime],
-    ["description", str],
-    ["category", str]
+    {
+        label: "id",
+        sheetToModel: str,
+        modelToSheet: str
+    },
+    {
+        label: "start",
+        sheetToModel: parseDateTime,
+        modelToSheet: dateTimeToString
+    },
+    {
+        label: "end",
+        sheetToModel: parseDateTime,
+        modelToSheet: dateTimeToString
+    },
+    {
+        label: "description",
+        sheetToModel: str,
+        modelToSheet: str
+    },
+    {
+        label: "category",
+        sheetToModel: str,
+        modelToSheet: str
+    }
 ];
 
 
@@ -71,14 +104,29 @@ export function createGoogleSheetStorage({ CLIENT_ID, DISCOVERY_DOCS, SCOPES, DO
                 let rows = response.result.values;
                 return rows.map(row => {
                     let rowObj = {};
-                    googleSheetSchema.forEach(([name, parse], i) => {
-                        rowObj[name] = parse(row[i]);
+                    googleSheetSchema.forEach(({ label, sheetToModel }, i) => {
+                        rowObj[label] = sheetToModel(row[i]);
                     });
                     return rowObj;
                 });
                 return results;
             }, function (response) {
                 console.log("Got error when reading sheet");
+            });
+        },
+
+        saveTimeLog(timelog) {
+            timelog = googleSheetSchema.map(({ label, modelToSheet }) => {
+                return modelToSheet(timelog[label]);
+            })
+            console.log("About to save ", timelog)
+            return gapi.client.sheets.spreadsheets.values.append({
+                spreadsheetId: DOC_ID,
+                range: 'tttime!A:E',
+                valueInputOption: 'RAW',
+                resource: {
+                    values: [timelog]
+                }
             });
         }
     }
