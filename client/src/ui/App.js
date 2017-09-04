@@ -7,7 +7,7 @@ import Home from './Home'
 import CreateTimelog from './CreateTimelog'
 import EditTimelog from './EditTimelog'
 import Loader from './Loader'
-import { toViewModel } from '../utils'
+import { toViewModel, getPeriodLength } from '../utils'
 
 
 
@@ -32,7 +32,17 @@ class App extends Component {
     fetchTimelogs = () => {
         this.setState({ fetchingTimelogs: true });
         this.props.storage.getTimeLogs().then(timelogs => {
-            this.setState({ timelogs, fetchingTimelogs: false });
+            timelogs.sort((a, b) => a.start < b.start ? 1 : -1);
+            let timeWorkedMs = timelogs.reduce(
+                (total, timelog) => total + (timelog.end - timelog.start), 
+                0);
+            
+
+            this.setState({ 
+                timelogs, 
+                fetchingTimelogs: false,
+                totalHoursWorked: getPeriodLength(timeWorkedMs)    
+            });
         })
     }
 
